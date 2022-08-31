@@ -1,6 +1,9 @@
 import os
 import subprocess
 import urllib.request
+import sys
+import argparse
+
 
 def connect(host='http://google.com'):
 	try:
@@ -9,12 +12,12 @@ def connect(host='http://google.com'):
 	except:
 		return False
 
-print("Reconing Started..." if connect() else "Please check your connectivity")
+print("\n\n\t\t*RECON TOOL*\n" if connect() else "Please check your connectivity")
 
 def ping(url): #To check whether the host is up or down
 	response = subprocess.run(["ping","-c","1", url], stdout=subprocess.DEVNULL)
 	if response.returncode == 0:
-		pingstatus = "Network is active"
+		pingstatus = "Network is active\n"
 	else:
 		pingstatus = "Host Unreachable"
 	print(pingstatus)
@@ -24,7 +27,7 @@ def ping(url): #To check whether the host is up or down
 def recon(url):
 	
 	cmd1 = 'subfinder -d '+url+' -o .temp/subfinder.txt >/dev/null 2>&1'
-	cmd2 = 'python3 /home/Sublist3r/sublist3r.py -d '+url+' -e baidu,yahoo,google,bing,ask,netcraft,threatcrowd,ssl,passivedns -o .temp/sublist3r.txt >/dev/null 2>&1'
+	cmd2 = 'python3 /home/advaith/Sublist3r/sublist3r.py -d '+url+' -e baidu,yahoo,google,bing,ask,netcraft,threatcrowd,ssl,passivedns -o .temp/sublist3r.txt >/dev/null 2>&1'
 	cmd3 = 'findomain -t '+url+'| sort -u | tee -a .temp/findomain.txt >/dev/null 2>&1'
 	cmd4 = 'assetfinder --subs-only '+url+' | tee -a .temp/assetfinder.txt >/dev/null 2>&1'
 	#cmd5 = 'amass enum -passive -d '+url+' -o .temp/amass.txt >/dev/null 2>&1'
@@ -46,10 +49,13 @@ def recon(url):
 	cmd8 = 'cat alive.txt'
 	print("-----------------Here are the alive subdomains for the target--------------\n\n",url)
 	os.system(cmd8)
-	cmd9 = 'cat alive.txt | aquatone -out /home/Desktop/Recon/aquatone/'+url+'>/dev/null 2>&1'
+	cmd9 = 'cat alive.txt | aquatone -out /home/advaith/Desktop/Recon/aquatone/'+url+'>/dev/null 2>&1'
 	print('Running Aquatone to capture the alive subdomains')
 	os.system(cmd9)
-	
-url_in = input("Enter the URL: ")
-ping(url_in)
-recon(url_in)
+
+parser = argparse.ArgumentParser()
+parser.add_argument('-d', dest='d', type=str, help='Domain Name')
+args = parser.parse_args()
+domain = args.d
+ping(domain)
+recon(domain)
