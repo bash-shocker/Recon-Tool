@@ -30,7 +30,7 @@ def recon(url):
 	cmd2 = 'python3 /home/Sublist3r/sublist3r.py -d '+url+' -e baidu,yahoo,google,bing,ask,netcraft,threatcrowd,ssl,passivedns -o .temp/sublist3r.txt >/dev/null 2>&1'
 	cmd3 = 'findomain -t '+url+'| sort -u | tee -a .temp/findomain.txt >/dev/null 2>&1'
 	cmd4 = 'assetfinder --subs-only '+url+' | tee -a .temp/assetfinder.txt >/dev/null 2>&1'
-	#cmd5 = 'amass enum -passive -d '+url+' -o .temp/amass.txt >/dev/null 2>&1'
+	cmd5 = 'amass enum -passive -d '+url+' -o .temp/amass.txt >/dev/null 2>&1'
 	cmd6 = 'cat .temp/*.txt | sort -u | grep -i '+url+' | tee -a all.txt >/dev/null 2>&1'
 	cmd7 = 'cat all.txt| httpx -silent -ports 80,443,3000,8080,8000,8081,8008,8888,8443,9000,9001,9090 | tee -a alive.txt >/dev/null 2>&1'
 	print('Running Subfinder..')
@@ -41,8 +41,8 @@ def recon(url):
 	os.system(cmd3)
 	print('Running assetfinder..')
 	os.system(cmd4)
-	#print('Running AMASS..')
-	#os.system(cmd5)
+	print('Running AMASS..')
+	os.system(cmd5)
 	os.system(cmd6)
 	print('Scanning alive subdomains')
 	os.system(cmd7)
