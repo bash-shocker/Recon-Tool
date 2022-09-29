@@ -26,6 +26,10 @@ def ping(url): #To check whether the host is up or down
 
 def recon(url):
 	
+	delete= 'rm -f all.txt'
+	delete2= 'rm -f alive.txt'
+	os.system(delete)
+	os.system(delete2)
 	cmd1 = 'subfinder -d '+url+' -o .temp/subfinder.txt >/dev/null 2>&1'
 	cmd2 = 'python3 /home/Sublist3r/sublist3r.py -d '+url+' -e baidu,yahoo,google,bing,ask,netcraft,threatcrowd,ssl,passivedns -o .temp/sublist3r.txt >/dev/null 2>&1'
 	cmd3 = 'findomain -t '+url+'| sort -u | tee -a .temp/findomain.txt >/dev/null 2>&1'
@@ -50,9 +54,9 @@ def recon(url):
 	print("-----------------Here are the alive subdomains for the target--------------\n\n",url)
 	os.system(cmd8)
 	cmd9 = 'cat alive.txt | aquatone -out /home/Desktop/Recon/aquatone/'+url+'>/dev/null 2>&1'
-	print('Running Aquatone to capture the alive subdomains')
+	print('\nRunning Aquatone to capture the alive subdomains')
 	os.system(cmd9)
-
+	
 parser = argparse.ArgumentParser()
 parser.add_argument('-d', dest='d', type=str, help='Domain Name')
 args = parser.parse_args()
